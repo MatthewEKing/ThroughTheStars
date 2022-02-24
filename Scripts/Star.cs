@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class Star : MonoBehaviour
 {
-    Star nextStar;
+    [SerializeField] Star nextStar;
     StarManager starManager;
+    LineRenderer lineRenderer;
 
     [SerializeField] bool activated = false;
+    Vector3[] positions;
 
     void Start()
     {
+        lineRenderer = GetComponent<LineRenderer>();
+        //lineRenderer.enabled = false;
+        positions = new Vector3[2];
+
         starManager = FindObjectOfType<StarManager>();
         int lengthOfStarArray = starManager.starsInLevel.Length;
         Debug.Log(lengthOfStarArray);
@@ -19,8 +25,18 @@ public class Star : MonoBehaviour
         {
             if (starManager.starsInLevel[i].gameObject == this.gameObject)
             {
-                Debug.Log(starManager.starsInLevel[i].gameObject.name);
+                nextStar = starManager.starsInLevel[i++];
             }
+        }
+    }
+
+    void Update()
+    {
+        if (activated)
+        {
+            positions[0] = transform.position;
+            positions[1] = FindObjectOfType<Movement>().gameObject.transform.position;
+            lineRenderer.SetPositions(positions);
         }
     }
 
@@ -28,7 +44,13 @@ public class Star : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            activated = true;
+            ConnectToPlayer();
         }
+    }
+
+    void ConnectToPlayer()
+    {
+        Debug.Log("working");
+        activated = true;
     }
 }
