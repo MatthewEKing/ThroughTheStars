@@ -4,35 +4,25 @@ using UnityEngine;
 
 public class Star : MonoBehaviour
 {
-    [SerializeField] Star nextStar;
     StarManager starManager;
     LineRenderer lineRenderer;
 
-    [SerializeField] bool activated = false;
+    public bool connected = false;
     Vector3[] positions;
 
     void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
-        //lineRenderer.enabled = false;
+        // Set Array For Line Renderer Positions
         positions = new Vector3[2];
 
+        // Cache
+        lineRenderer = GetComponent<LineRenderer>();
         starManager = FindObjectOfType<StarManager>();
-        int lengthOfStarArray = starManager.starsInLevel.Length;
-        Debug.Log(lengthOfStarArray);
-
-        for (int i = 0; i < lengthOfStarArray; i++)
-        {
-            if (starManager.starsInLevel[i].gameObject == this.gameObject)
-            {
-                nextStar = starManager.starsInLevel[i++];
-            }
-        }
     }
 
     void Update()
     {
-        if (activated)
+        if (connected)
         {
             positions[0] = transform.position;
             positions[1] = FindObjectOfType<Movement>().gameObject.transform.position;
@@ -51,6 +41,6 @@ public class Star : MonoBehaviour
     void ConnectToPlayer()
     {
         Debug.Log("working");
-        activated = true;
+        connected = true;
     }
 }

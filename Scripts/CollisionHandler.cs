@@ -51,7 +51,7 @@ public class CollisionHandler : MonoBehaviour
         switch (other.gameObject.tag)
         {
             case "Friendly":
-                Debug.Log("Collided w/ Friendly");
+                //Debug.Log("Collided w/ Friendly");
                 break;
 
             case "Finish":
