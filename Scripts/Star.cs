@@ -6,41 +6,58 @@ public class Star : MonoBehaviour
 {
     StarManager starManager;
     LineRenderer lineRenderer;
+    Movement player;
 
     public bool connected = false;
+    public bool connectedToPlayer = false;
+
+    public bool loopAtEnd;
+
+    // Line Renderer Pos
     Vector3[] positions;
+    Vector3 firstPosition;
+    Vector3 secondPosition;
 
     void Start()
     {
         // Set Array For Line Renderer Positions
         positions = new Vector3[2];
+        firstPosition = this.transform.position;
+        secondPosition = this.transform.position;
 
         // Cache
         lineRenderer = GetComponent<LineRenderer>();
         starManager = FindObjectOfType<StarManager>();
+        player = FindObjectOfType<Movement>();
     }
 
     void Update()
     {
         if (connected)
         {
-            positions[0] = transform.position;
-            positions[1] = FindObjectOfType<Movement>().gameObject.transform.position;
             lineRenderer.SetPositions(positions);
         }
-    }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player")
+        if (connectedToPlayer)
         {
-            ConnectToPlayer();
+            secondPosition = player.transform.position;
+            lineRenderer.SetPositions(positions);
         }
+
+        positions[0] = firstPosition;
+        positions[1] = secondPosition;
     }
 
-    void ConnectToPlayer()
+    public void ConnectToNextStar(Vector3 firstPos, Vector3 secondPos)
     {
-        Debug.Log("working");
         connected = true;
+        connectedToPlayer = false;
+        firstPosition = firstPos;
+        secondPosition = secondPos;
+    }
+
+    public void ConnectToPlayer()
+    {
+        connectedToPlayer = true;
     }
 }

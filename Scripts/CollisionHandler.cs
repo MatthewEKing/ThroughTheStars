@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     AudioSource audioSource;
+    StarManager starManager;
 
     [SerializeField] AudioClip successSFX;
     [SerializeField] AudioClip crashSFX;
@@ -21,6 +23,7 @@ public class CollisionHandler : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        starManager = FindObjectOfType<StarManager>();
     }
 
     private void Update()
@@ -64,15 +67,60 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        switch (other.gameObject.tag)
+        {
+            case "Star":
+                HandleStarCollision(other.GetComponent<Star>());
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void HandleStarCollision(Star star)
+    {
+        Star currentStar = starManager.currentStar;
+        Star nextStar = starManager.nextStar;
+        Star finalStar = starManager.finalStar;
+
+        if (star == nextStar) 
+        {
+            // Connects the last star with the star the player currently collided with
+            if (currentStar != null)
+            {
+                currentStar.ConnectToNextStar(currentStar.transform.position, nextStar.transform.position);
+            }
+
+            // Restricts the final star from connecting to the player
+            if (nextStar != finalStar)
+            {
+                nextStar.ConnectToPlayer();
+            }
+            else
+            {
+                finalStar.connected = true;
+            }
+
+            starManager.CheckIfConstellationIsComplete();
+            starManager.SetCurrentStar(star);
+            starManager.SetNextStar();
+        }
+    }
 
     void StartSucessSequence()
     {
-        isTransitioning = true;
-        audioSource.Stop();
-        successParticles.Play();
-        GetComponent<Movement>().enabled = false;
-        audioSource.PlayOneShot(successSFX);
-        Invoke("LoadNextLevel", levelLoadDelay);
+        if (starManager.CheckIfConstellationIsComplete())
+        {
+            isTransitioning = true;
+            audioSource.Stop();
+            successParticles.Play();
+            GetComponent<Movement>().enabled = false;
+            audioSource.PlayOneShot(successSFX);
+            Invoke("LoadNextLevel", levelLoadDelay);
+        }
     }
 
     void StartCrashSequence()
@@ -102,3 +150,4 @@ public class CollisionHandler : MonoBehaviour
         SceneManager.LoadScene(currentSceneIndex);
     }
 }
+
