@@ -104,7 +104,7 @@ public class CollisionHandler : MonoBehaviour
                 finalStar.connected = true;
             }
 
-            starManager.CheckIfConstellationIsComplete();
+            //starManager.CheckIfConstellationIsComplete();
             starManager.SetCurrentStar(star);
             starManager.SetNextStar();
         }

@@ -52,6 +52,7 @@ public class Star : MonoBehaviour
     {
         connected = true;
         connectedToPlayer = false;
+        lineRenderer.enabled = true;
         firstPosition = firstPos;
         secondPosition = secondPos;
     }
@@ -59,5 +60,6 @@ public class Star : MonoBehaviour
     public void ConnectToPlayer()
     {
         connectedToPlayer = true;
+        lineRenderer.enabled = true;
     }
 }
