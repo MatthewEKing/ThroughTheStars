@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StarManager : MonoBehaviour
 {
+    [SerializeField] Material nextStarMaterial;
+
     public Star[] starsInLevel;
     public Star nextStar;
     public Star currentStar;
@@ -13,7 +15,7 @@ public class StarManager : MonoBehaviour
     {
         starsInLevel = GetComponentsInChildren<Star>();
         SetNextStar();
-        finalStar = starsInLevel[starsInLevel.Length -1];
+        finalStar = starsInLevel[starsInLevel.Length - 1];
     }
 
     public void SetNextStar()
@@ -23,11 +25,26 @@ public class StarManager : MonoBehaviour
             if (!starsInLevel[i].connectedToPlayer && !starsInLevel[i].connected)
             {
                 nextStar = starsInLevel[i];
+                UpdateNextStar(nextStar);
                 return;
             }
         }
     }
 
+    public void SetCurrentStar(Star currStar)
+    {
+        currentStar = currStar;
+    }
+    public Star GetNextStar()
+    {
+        return nextStar;
+    }
+
+    void UpdateNextStar(Star nextStar)
+    {
+        // change next star to signal its the next star
+        nextStar.GetComponent<MeshRenderer>().material = nextStarMaterial;
+    }
     public bool CheckIfConstellationIsComplete()
     {
         for (int i = 0; i < starsInLevel.Length; i++)
@@ -38,15 +55,5 @@ public class StarManager : MonoBehaviour
             }
         }
         return true;
-    }
-
-    public void SetCurrentStar(Star star)
-    {
-        currentStar = star;
-    }
-
-    public Star GetNextStar()
-    {
-        return nextStar;
     }
 }
