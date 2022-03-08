@@ -43,7 +43,7 @@ public class StarManager : MonoBehaviour
     void UpdateNextStar(Star nextStar)
     {
         // change next star to signal its the next star
-        nextStar.GetComponent<MeshRenderer>().material = nextStarMaterial;
+        nextStar.GetComponentInChildren<MeshRenderer>().material = nextStarMaterial;
     }
     public bool CheckIfConstellationIsComplete()
     {
