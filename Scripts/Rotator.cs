@@ -5,9 +5,10 @@ using UnityEngine;
 public class Rotator : MonoBehaviour
 {
     [SerializeField] float rotateSpeed;
+    [SerializeField] Vector3 rotateVector;
 
     void Update()
     {
-        transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);
+        transform.Rotate(rotateVector * rotateSpeed * Time.deltaTime);
     }
 }
