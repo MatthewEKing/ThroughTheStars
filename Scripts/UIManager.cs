@@ -16,4 +16,9 @@ public class UIManager : MonoBehaviour
         }
         SceneManager.LoadScene(nextSceneIndex);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
